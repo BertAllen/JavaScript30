@@ -59,6 +59,26 @@
 
 <script>
 
+
+function playSound(e){ //used as a callback to initiate sound and CSS transition events
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);//grabs audio tag according to 'keydown' event
+  const key = document.querySelector(`div[data-key="${e.keyCode}"]`);//grabs div tag corresponding to the same 'keydown' event
+  if (!audio) return;//if pressed key is "out of bounds" then function terminates
+
+  key.classList.add('playing');//begins CSS transition effect
+  audio.currentTime =0;//restarts audio file when key is pressed, doesn't wait for file to end natrually
+  audio.play();
+}
+
+function removeTransition(e){ //used as a callback to reset the DOM
+  if(e.propertyName !== 'transform') return;
+  e.target.classList.remove('playing');
+}
+
+const keys = Array.from(document.querySelectorAll('.key'));//grabs all DOM elements with a class propertyName containing the word 'key'
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+window.addEventListener('keydown', playSound);//uses keydown window event to invoke 'playSound' callback and start the program cascade
+
 </script>
 
 
